@@ -4,79 +4,83 @@
 #include "pilhaDinamica.c"
 
 int verificaBalanceamento(Fila* fila) {
+    if (fila == NULL) {
+        return 0;  // Retorna não balanceado se fila é inválida
+    }
+
     Pilha* pilha = criarPilha();
+    if (pilha == NULL) {
+        return 0;  // Retorna não balanceado se falhar em criar pilha
+    }
+
+    // Cria uma fila auxiliar para preservar a fila original
+    Fila* filaAux = criarFila(fila->capacity);
+    if (filaAux == NULL) {
+        free(pilha);
+        return 0;
+    }
+
+    int balanceada = 1;  // Assume que está balanceada até provar o contrário
+
     while (!isEmpty(fila)) {
         char elemento = dequeue(fila);
+        enqueue(filaAux, elemento);  // Preserva o elemento
+
         if (elemento == '(' || elemento == '[' || elemento == '{') {
             push(pilha, elemento);
         } else if (elemento == ')' || elemento == ']' || elemento == '}') {
-            if (isEmpty(pilha) ||
-                (elemento == ')' && pop(pilha) != '(') ||
-                (elemento == ']' && pop(pilha) != '[') ||
-                (elemento == '}' && pop(pilha) != '{')) {
-                clear(pilha);
-                free(pilha);
-                return 0;
+            if (isEmpty(pilha)) {
+                balanceada = 0;
+                break;
+            }
+
+            char topo = pop(pilha);
+            if ((elemento == ')' && topo != '(') ||
+                (elemento == ']' && topo != '[') ||
+                (elemento == '}' && topo != '{')) {
+                balanceada = 0;
+                break;
             }
         }
     }
-    int balanceada = isEmpty(pilha) ? 1 : 0;
+
+    // Verifica se sobrou algum parêntese aberto
+    if (!isEmpty(pilha)) {
+        balanceada = 0;
+    }
+
+    // Restaura a fila original
+    while (!isEmpty(filaAux)) {
+        enqueue(fila, dequeue(filaAux));
+    }
+
     clear(pilha);
     free(pilha);
+    clear(filaAux);
+    free(filaAux);
+
     return balanceada;
 }
 
 int main() {
-    int tamanho;
-    while (1) {
-        printf("Tamanho da fila: ");
-        if (scanf("%d", &tamanho) == 1 && tamanho > 0) {
-            if (tamanho % 2 != 0) {
-                printf("Sequencia nao balanceada, numero de elementos impar.\n");
-                return 0;
-            }
-            break;
-        } else {
-            printf("Erro. Por favor, insira um numero inteiro positivo.\n");
-            while (getchar() != '\n');
-        }
-    }
-
-    Fila* fila = criarFila(tamanho);
+    // Exemplo de uso direto
+    Fila* fila = criarFila(6);  // Tamanho definido diretamente (alterar aqui)
     if (fila == NULL) {
         printf("Erro ao criar a fila.\n");
         return 1;
     }
 
-    char sequencia[tamanho + 1];
-    printf("Digite a sequencia de sinais: ");
-    scanf("%s", sequencia);
-
-    int contador = 0;
-    for (int i = 0; sequencia[i] != '\0'; i++) {
-        char elemento = sequencia[i];
-        if (elemento == '(' || elemento == ')' || elemento == '{' || elemento == '}' || elemento == '[' || elemento == ']') {
-            if (contador < tamanho) {
-                enqueue(fila, elemento);
-                contador++;
-            } else {
-                printf("Overflow: a sequencia tem mais elementos do que o permitido.\n");
-                clear(fila);
-                free(fila);
-                return 0;
-            }
-        } else {
-            printf("Erro -> '%c'! Digite apenas '()', '{}', '[]'.\n", elemento);
-            clear(fila);
-            free(fila);
-            return 1;
-        }
-    }
+    // Sequência de teste: "{[()]}"
+    enqueue(fila, '{');
+    enqueue(fila, '[');
+    enqueue(fila, '(');
+    enqueue(fila, ')');
+    enqueue(fila, ']');
+    enqueue(fila, '}');
 
     printf("Sequencia %s.\n", verificaBalanceamento(fila) ? "balanceada" : "nao balanceada");
 
     clear(fila);
     free(fila);
-
     return 0;
 }
