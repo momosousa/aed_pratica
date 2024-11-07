@@ -4,25 +4,30 @@
 #include "tree.h"
 
 void caminhos(Node* node,int soma){
+    //para evitar quaisquer erros ao chegar em um node NULL
     if(node==NULL){
         return;
     }
 
-    soma=soma+node->data;//atualizando a soma recursiva ao entrar em um novo n�
+    //somando o valor do noh atual na variavel soma que guarda a somatoria dos caminhos recursivamente
+    soma=soma+node->data;//atualizando a soma recursiva ao entrar em um novo node
 
     if(node->left!=NULL&&node->right!=NULL){
+        //caso o node tenha o node->right e o node->left nao nulos, chamaremos a funcao novamente
         caminhos(node->left,soma);
         caminhos(node->right,soma);
     }
     else{
         if(node->left!=NULL&&node->right==NULL){
+            //chamando a funcao para o node->left uma vez que ele nao eh nulo
             caminhos(node->left,soma);
         }
         if(node->left==NULL&&node->right!=NULL){
+            //chamando a funcao para o node->right uma vez que ele nao eh nulo
             caminhos(node->right,soma);
         }
         else{
-            if(node->left==NULL&&node->right==NULL){//printando a soma quando chegamos na folha da �rvore ( com os lados esquerdo e direito iguais a NULL
+            if(node->left==NULL&&node->right==NULL){//printando a soma quando chegamos na folha da arvore ( com os lados esquerdo e direito iguais a NULL
                 printf("%d ",soma);
                 return;
             }
