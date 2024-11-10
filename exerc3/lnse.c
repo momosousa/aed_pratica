@@ -1,116 +1,151 @@
 #include <stdio.h>
 #include "lnse.h"
 
-// Função para inicializar a LNSE
-void inicializar(LNSE *lista) {
+// Inicializa a lista e a fila estática de posições vazias
+void inicializar(ListaEstatica *lista) {
+    lista->head = VAZIO;
+    lista->tail = VAZIO;
     lista->tamanho = 0;
-    lista->head = -1;
-    lista->tail = -1;
-    lista->fila_inicio = 0;
-    lista->fila_fim = 0;
+    lista->inicioFila = 0;
+    lista->fimFila = MAX - 1;
 
-    // Inicializa a fila de índices livres
-    for (int i = 0; i < CAPACIDADE; i++) {
-        lista->fila[i] = i;
-        lista->elementos[i] = -1; // Marca a posição como vazia
-        lista->prox[i] = -1;      // Define o próximo como vazio
+    // Preenche a fila estática com todas as posições disponíveis
+    for (int i = 0; i < MAX; i++) {
+        lista->filaVazia[i] = i;
+        lista->elementos[i].prox = VAZIO;
+        lista->elementos[i].valor = 0;
     }
 }
 
-// Enfileirar um índice livre
-void enqueue(LNSE *lista, int indice) {
-    lista->fila[lista->fila_fim] = indice;
-    lista->fila_fim = (lista->fila_fim + 1) % CAPACIDADE;
+// Função auxiliar para desenfileirar índice da fila de posições vazias
+int dequeue(ListaEstatica *lista) {
+    if (lista->inicioFila > lista->fimFila) {
+        return VAZIO;
+    }
+    return lista->filaVazia[lista->inicioFila++];
 }
 
-// Desenfileirar um índice livre
-int dequeue(LNSE *lista) {
-    int indice = lista->fila[lista->fila_inicio];
-    lista->fila_inicio = (lista->fila_inicio + 1) % CAPACIDADE;
-    return indice;
+// Função auxiliar para enfileirar índice na fila de posições vazias
+void enqueue(ListaEstatica *lista, int indice) {
+    if (lista->fimFila < MAX - 1) {
+        lista->filaVazia[++lista->fimFila] = indice;
+    }
 }
 
-// Função para inserir um elemento na LNSE
-void inserir(LNSE *lista, int x) {
-    if (lista->tamanho == CAPACIDADE) {
+// Insere um valor x na posição i da lista
+void inserir(ListaEstatica *lista, int x, int i) {
+    if (lista->inicioFila > lista->fimFila) {
         printf("Lista cheia!\n");
         return;
     }
-
-    int posicao = dequeue(lista);
-    lista->elementos[posicao] = x;
-
-    if (lista->head == -1) {
-        lista->head = posicao;
-    } else {
-        lista->prox[lista->tail] = posicao;
+    if (i < 0 || i > lista->tamanho) {
+        printf("Posicao invalida!\n");
+        return;
     }
-    lista->tail = posicao;
-    lista->prox[posicao] = -1;
+
+    int indice = dequeue(lista);
+    lista->elementos[indice].valor = x;
+
+    if (lista->head == VAZIO) { // Lista vazia
+        lista->head = indice;
+        lista->tail = indice;
+        lista->elementos[indice].prox = VAZIO;
+    } else if (i == 0) { // Inserir no início
+        lista->elementos[indice].prox = lista->head;
+        lista->head = indice;
+    } else {
+        int anterior = lista->head;
+        for (int pos = 0; pos < i - 1; pos++) {
+            anterior = lista->elementos[anterior].prox;
+        }
+        lista->elementos[indice].prox = lista->elementos[anterior].prox;
+        lista->elementos[anterior].prox = indice;
+        if (lista->elementos[indice].prox == VAZIO) {
+            lista->tail = indice;
+        }
+    }
     lista->tamanho++;
 }
 
-// Função para remover um elemento na posição i
-int remover(LNSE *lista, int i) {
-    if (lista->elementos[i] == -1) {
-        printf("Posição vazia!\n");
-        return -1;
+// Remove o item na posição i da lista e retorna o valor
+int remover(ListaEstatica *lista, int i) {
+    if (lista->head == VAZIO) {
+        printf("Lista vazia!\n");
+        return VAZIO;
+    }
+    if (i < 0 || i >= lista->tamanho) {
+        printf("Posicao invalida!\n");
+        return VAZIO;
     }
 
-    int valor = lista->elementos[i];
-    lista->elementos[i] = -1;
+    int anterior = VAZIO;
+    int atual = lista->head;
+    for (int pos = 0; pos < i; pos++) {
+        anterior = atual;
+        atual = lista->elementos[atual].prox;
+    }
 
-    if (i == lista->head) {
-        lista->head = lista->prox[i];
+    int valorRemovido = lista->elementos[atual].valor;
+
+    if (anterior == VAZIO) { // Removendo o primeiro elemento
+        lista->head = lista->elementos[atual].prox;
     } else {
-        for (int j = lista->head; j != -1; j = lista->prox[j]) {
-            if (lista->prox[j] == i) {
-                lista->prox[j] = lista->prox[i];
-                break;
-            }
-        }
+        lista->elementos[anterior].prox = lista->elementos[atual].prox;
     }
 
-    if (i == lista->tail) {
-        lista->tail = -1;
+    if (lista->elementos[atual].prox == VAZIO) { // Removendo o último elemento
+        lista->tail = anterior;
     }
 
-    enqueue(lista, i);
+    enqueue(lista, atual);
+    lista->elementos[atual].prox = VAZIO;
+    lista->elementos[atual].valor = 0;
     lista->tamanho--;
-    return valor;
+
+    return valorRemovido;
 }
 
-// Função para buscar um elemento x na lista
-int buscar(LNSE *lista, int x) {
-    for (int i = lista->head; i != -1; i = lista->prox[i]) {
-        if (lista->elementos[i] == x) {
-            return i;
+// Busca o item x na lista e retorna sua posição
+int buscar(ListaEstatica *lista, int x) {
+    int atual = lista->head;
+    int pos = 0;
+    while (atual != VAZIO) {
+        if (lista->elementos[atual].valor == x) {
+            return pos;
         }
+        atual = lista->elementos[atual].prox;
+        pos++;
     }
-    return -1;
+    return VAZIO; // Não encontrado
 }
 
-// Função para obter o tamanho da lista
-int size(LNSE *lista) {
+// Retorna o número de elementos na lista
+int size(ListaEstatica *lista) {
     return lista->tamanho;
 }
 
-// Função para limpar a lista
-void clear(LNSE *lista) {
+// Remove todos os elementos da lista
+void clear(ListaEstatica *lista) {
     inicializar(lista);
 }
 
-// Função para imprimir a lista
-void imprimir(LNSE *lista) {
-    printf("LNSE: ");
-    for (int i = 0; i < CAPACIDADE; i++) {
-        if (lista->elementos[i] == -1) {
-            printf(" - ");
+// Imprime a lista real, o índice do head, o índice do tail e os valores no vetor
+void imprimir(ListaEstatica *lista) {
+    printf("Lista real: ");
+    int atual = lista->head;
+    while (atual != VAZIO) {
+        printf("%d ", lista->elementos[atual].valor);
+        atual = lista->elementos[atual].prox;
+    }
+    printf("\nHead: %d, Tail: %d\n", lista->head, lista->tail);
+    printf("Vetor de elementos:\n");
+    for (int i = 0; i < MAX; i++) {
+        if (lista->elementos[i].prox != VAZIO || lista->elementos[i].valor != 0) {
+            printf("indice %d: Valor = %d, Prox = %d\n", i, lista->elementos[i].valor, lista->elementos[i].prox);
         } else {
-            printf("%d ", lista->elementos[i]);
+            printf("indice %d: (-)\n", i);
         }
     }
-    printf("\nHead: %d\n", lista->head);
-    printf("Tail: %d\n", lista->tail);
 }
+
 
