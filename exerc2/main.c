@@ -5,7 +5,7 @@
 
 int main()
 {
-    Pilha* pilha=criarPilha();
+    Pilha* pilha=criarPilha(10);
 
     printf("Inserir 18 na pilha A: ");
     pushA(pilha,18);
