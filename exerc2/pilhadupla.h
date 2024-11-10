@@ -1,20 +1,20 @@
 #ifndef PILHADUPLA_H_INCLUDED
 #define PILHADUPLA_H_INCLUDED
 
-#define TAMANHO 10
 
 typedef struct Pilha{
 
-    //definindo uma struct do tipo Pilha para passar como par�metro para as fun��es e facilitar o uso dos valores e topos podendo alter�-los de uma s� vez e retornando somente uma pilha do tipo Pilha
+    //definindo uma struct do tipo Pilha para passar como parâmetro para as funções e facilitar o uso dos valores e topos podendo alterá-los de uma só vez e retornando somente uma pilha do tipo Pilha
     int topoA;
     int topoB;
-    int valores[TAMANHO];
+    int tamanho;
+    int* valores;
 
 }Pilha;
 
-Pilha* criarPilha();
+Pilha* criarPilha(int tamanho);
 
-// Fun��es de manipula��o da pilha dupla
+// Funções de manipulação da pilha dupla
 Pilha* pushA(Pilha* pilha, int valor);
 Pilha* pushB(Pilha* pilha, int valor);
 
