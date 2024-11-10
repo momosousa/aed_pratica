@@ -108,13 +108,13 @@ void clear(Fila *fila) {
 void imprimir(Fila *fila) {
 
     if (isEmpty(fila)) {
-        printf("\n[ ]\n");
+        printf(" Fila vazia!\n");
         return;
     }
 
     Fila* auxFila = criarFila(fila->capacity);
 
-    printf("\n[");
+    printf("");
     // Seguindo as regras da fila, a unica forma de
     // acessar todos os seus valores, eh destruindo ela
     while( isEmpty(fila)!=1 ){
@@ -125,7 +125,7 @@ void imprimir(Fila *fila) {
 
         printf(" %c", front);
     }
-    printf(" ]\n");
+    printf("");
 
     // Recupera a fila
     while( isEmpty(auxFila)!=1 ){

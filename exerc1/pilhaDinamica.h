@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fila_estaticaCircular.h"
-#include "fila_estaticaCircular.c"
 
 // Definição do nó da pilha
 typedef struct Node {
@@ -21,8 +20,11 @@ typedef struct {
 // Função para criar um novo nó
 Node* criarNode(char data);
 
+//Função para criar pilha
+Pilha* criarPilha();
+
 // Função para verificar se a pilha está vazia
-int isEmpty(Pilha* pilha);
+int isEmptyPilha(Pilha* pilha);
 
 // Função para adicionar um elemento no topo da pilha
 void push(Pilha* pilha, char data);
@@ -31,13 +33,13 @@ void push(Pilha* pilha, char data);
 char pop(Pilha* pilha);
 
 // Função para retornar a quantidade de elementos da pilha
-int size(Pilha* pilha);
+int sizePilha(Pilha* pilha);
 
 // Função para retornar o topo da pilha sem remover
 char getTop(Pilha* pilha);
 
 // Função para limpar a pilha
-void clear(Pilha* pilha);
+void clearPilha(Pilha* pilha);
 
 // Função para imprimir a pilha
 void imprimirPilha(Pilha* pilha);

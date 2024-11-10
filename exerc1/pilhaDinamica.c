@@ -26,7 +26,7 @@ Node* criarNode(char data) {
 }
 
 // Função para verificar se a pilha está vazia
-int isEmpty(Pilha* pilha) {
+int isEmptyPilha(Pilha* pilha) {
 
     if (pilha->tamanho==0){
         return 1;
@@ -57,7 +57,7 @@ void push(Pilha* pilha, char data) {
 // Função para remover e retornar o elemento do topo da pilha
 char pop(Pilha* pilha) {
 
-    if ( isEmpty(pilha) ) {
+    if ( isEmptyPilha(pilha) ) {
         printf("\nPilha vazia. Erro (underflow)");
         return '0';  // Erro: underflow
     }
@@ -84,7 +84,7 @@ int size(Pilha* pilha) {
 // Função para retornar o topo da pilha sem remover
 char getTop(Pilha* pilha) {
 
-    if ( isEmpty(pilha) ) {
+    if ( isEmptyPilha(pilha) ) {
         printf("\nPilha vazia. Erro (underflow)");
         return '0';  // Erro: underflow
     }
@@ -93,8 +93,8 @@ char getTop(Pilha* pilha) {
 }
 
 // Função para limpar a pilha
-void clear(Pilha* pilha) {
-    while (!isEmpty(pilha)) {
+void clearPilha(Pilha* pilha) {
+    while (!isEmptyPilha(pilha)) {
         pop(pilha);
     }
 }
@@ -106,14 +106,14 @@ void imprimirPilha(Pilha* pilha) {
 
     // Seguindo as regras da pilha, a unica forma de
     // acessar todos os seus valores, eh destruindo ela
-    while ( isEmpty(pilha)!=1 ) {
+    while ( isEmptyPilha(pilha)!=1 ) {
         char data = pop(pilha);
 
         // Salva o dado na outra pilha para recuperar depois
         push(auxPilha, data);
     }
 
-    while ( isEmpty(auxPilha)!=1 ) {
+    while ( isEmptyPilha(auxPilha)!=1 ) {
         char data = pop(auxPilha);
 
         // Recupera o valor na pilha original
