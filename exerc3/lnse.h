@@ -1,23 +1,32 @@
-#ifndef LNSE_H
-#define LNSE_H
+#ifndef LISTA_ESTATICA_H
+#define LISTA_ESTATICA_H
 
-#define CAPACIDADE 10 // Capacidade máxima da lista
+#define MAX 10
+#define VAZIO -1 // Indica posição vazia
 
 typedef struct {
-    int elementos[CAPACIDADE]; // Vetor que armazena os elementos da LNSE
-    int prox[CAPACIDADE];      // Vetor para indicar o próximo índice
-    int fila[CAPACIDADE];      // Fila de índices livres
-    int head, tail;            // Índices do primeiro e último elementos
-    int tamanho;               // Tamanho atual da lista
-    int fila_inicio, fila_fim; // Controle da fila de índices
-} LNSE;
+    int valor;
+    int prox;
+} Nodo;
 
-void inicializar(LNSE *lista);
-void inserir(LNSE *lista, int x);
-int remover(LNSE *lista, int i);
-int buscar(LNSE *lista, int x);
-int size(LNSE *lista);
-void clear(LNSE *lista);
-void imprimir(LNSE *lista);
+typedef struct {
+    Nodo elementos[MAX];
+    int head;        // Índice do primeiro elemento na lista
+    int tail;        // Índice do último elemento na lista
+    int tamanho;     // Número de elementos na lista
+    int filaVazia[MAX]; // Fila estática para controle de posições vazias
+    int inicioFila;  // Índice do início da fila
+    int fimFila;     // Índice do fim da fila
+} ListaEstatica;
 
-#endif
+// Funções da lista estática
+void inicializar(ListaEstatica *lista);
+void inserir(ListaEstatica *lista, int x, int i);
+int remover(ListaEstatica *lista, int i);
+int buscar(ListaEstatica *lista, int x);
+int size(ListaEstatica *lista);
+void clear(ListaEstatica *lista);
+void imprimir(ListaEstatica *lista);
+
+#endif // LISTA_ESTATICA_H
+
