@@ -170,7 +170,7 @@ void strPostorder(Node *node) {
     }
 }
 
-// Auxilia a contar o os subnos
+// Função auxiliar que conta recursivamente o número total de nós
 int contarSubNos(Node* node) {
     if (node == NULL) {
         return 0;
@@ -178,15 +178,21 @@ int contarSubNos(Node* node) {
     return 1 + contarSubNos(node->left) + contarSubNos(node->right); // ele mesmo + direita + esquerda
 }
 
-// Função principal para encontrar o nó e contar seus subnós
-int contarSubnosValor(Node* node, int valor) {
+/*
+Função que busca um nó com um valor específico na arvore e retorna o número total de nós na subárvore que tem esse valor como raiz.
+
+Busca o nó com o valor desejado e chama contarSubNos() para contar todos os nós abaixo dele.
+Se não encontrar o valor, retorna 0
+*/
+
+ int contarSubnosValor(Node* node, int valor) {
     if (node == NULL) {
         return 0;
     }
     if (node->data == valor) {
         return contarSubNos(node); // Chama a função auxiliar no nó encontrado
     }
-    // Se o valor é menor, busca no lado esquerdo; caso contrário, no direito
+    // Se o valor é menor, busca no lado esquerdo, senão, no direito
     if (valor < node->data) {
         return contarSubnosValor(node->left, valor);
     } else {
