@@ -3,30 +3,30 @@
 
 #include "pilhadupla.h"
 
-Pilha* criarPilha(){
+Pilha* criarPilha(int tamanho){
 
-    Pilha* pilha=(Pilha*)malloc(sizeof(Pilha));  // Aloca memoria para a estrutura Pilha
+    Pilha* pilha=(Pilha*)malloc(sizeof(Pilha));
     if (pilha==NULL){
-        printf("Erro ao alocar mem�ria para a pilha\n");
-        return;  // Termina o programa se a alocacao falhar
+        printf("Erro ao alocar memória para a pilha\n");
+        return;  // Termina o programa se a alocação falhar
     }
+    pilha->valores=(int*)malloc(sizeof(int)*tamanho);  // Aloca memória para a estrutura pilha->valores
+
     pilha->topoA=-1;
     pilha->topoB=-1;
-    
-    //para efeito de prática estou definindo todos os valors do vetor como 0 para não ter lixo de memória (não fará diferença no resultado final)
-    for(int i=0;i<TAMANHO;i++){
+    for(int i=0;i<tamanho;i++){
         pilha->valores[i]=0;
     }
+    pilha->tamanho=tamanho;
 
     return pilha;
 }
 
 Pilha* pushA(Pilha* pilha,int valor){
 
-    //verificando se quando formos dar um novo push, mudando portanto o topo da pilha, se o novo topo da pilha A (topoA+1) será igual ao topo da pilha B, se forem iguais, o vetor está completamente cheio
     if(pilha->topoA+1==pilha->topoB){
         printf("Todas as posicoes do vetor estao ocupadas!");
-        return;
+        return pilha;
     }
     pilha->topoA++;
     pilha->valores[pilha->topoA]=valor;
@@ -36,15 +36,12 @@ Pilha* pushA(Pilha* pilha,int valor){
 
 Pilha* pushB(Pilha* pilha,int valor){
 
-    //verificando se o novo topo da pilha B ( caso o push for ocorrer ) estará ocupado, isto é, o topo da pilha A será igual ao topo da pilha B
     if(pilha->topoA==pilha->topoB-1){
         printf("Todas as posicoes do vetor estao ocupadas!");
-        return;
+        return pilha;
     }
-
-    //a pilha B está vazia
     if(pilha->topoB==-1){
-        pilha->topoB=TAMANHO;
+        pilha->topoB=pilha->tamanho;
     }
 
     pilha->topoB--;
@@ -54,10 +51,10 @@ Pilha* pushB(Pilha* pilha,int valor){
 }
 
 Pilha* popA(Pilha* pilha){
-    //pop retorna o valor para o usuario, entao vamos simplesmente alterar o valor do topo apos printar o valor para o usuario
+    //pop retorna o valor para o usuário, então vamos simplesmente alterar o valor do topo após printar o valor para o usuário
     if(pilha->topoA==-1){
         printf("\nNao existem mais valores na pilha A!");
-        return;
+        return pilha;
     }
     printf("%d ",pilha->valores[pilha->topoA]);
     pilha->topoA--;
@@ -67,13 +64,13 @@ Pilha* popA(Pilha* pilha){
 
 Pilha* popB(Pilha* pilha){
 
-    if(pilha->topoB==TAMANHO){
+    if(pilha->topoB==pilha->tamanho){
         pilha->topoB=-1;
         printf("\nNao existem mais valores na pilha B!");
-        return;
+        return pilha;
     }
 
-    //pop retorna o valor para o usu�rio, ent�o vamos simplesmente alterar o valor do topo ap�s printar o valor para o usu�rio
+    //pop retorna o valor para o usuário, então vamos simplesmente alterar o valor do topo após printar o valor para o usuário
     printf("%d ",pilha->valores[pilha->topoB]);
     pilha->topoB++;
 
@@ -81,7 +78,7 @@ Pilha* popB(Pilha* pilha){
 }
 
 Pilha* clearA(Pilha* pilha){
-    //vamos chamar a funcao pop dentro de um laco de repeticao
+    //vamos chamar a função pop dentro de um laço de repetição
     do{
         popA(pilha);
     }while(pilha->topoA>=0);
@@ -90,8 +87,8 @@ Pilha* clearA(Pilha* pilha){
 }
 
 Pilha* clearB(Pilha* pilha){
-    //vamos chamar a funcao pop dentro de um laco de repeticao
-    while(pilha->topoB<TAMANHO){
+    //vamos chamar a função pop dentro de um laço de repetição
+    while(pilha->topoB<pilha->tamanho){
         popB(pilha);
     }
 
@@ -100,7 +97,6 @@ Pilha* clearB(Pilha* pilha){
 
 void imprimirA(Pilha* pilha){
 
-    //laco de repeticao para printar os valores da pilha A
     printf("[|");
     for(int i=pilha->topoA;i>=0;i--){
         printf("%d|",pilha->valores[i]);
@@ -111,9 +107,8 @@ void imprimirA(Pilha* pilha){
 }
 void imprimirB(Pilha* pilha){
 
-    //laco de repeticao para printar os valores da pilha B
     printf("[|");
-    for(int i=pilha->topoB;i<TAMANHO;i++){
+    for(int i=pilha->topoB;i<pilha->tamanho;i++){
         printf("%d|",pilha->valores[i]);
     }
     printf("]\n");
