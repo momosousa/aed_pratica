@@ -5,13 +5,15 @@
 
 Pilha* criarPilha(){
 
-    Pilha* pilha=(Pilha*)malloc(sizeof(Pilha));  // Aloca mem�ria para a estrutura Pilha
+    Pilha* pilha=(Pilha*)malloc(sizeof(Pilha));  // Aloca memoria para a estrutura Pilha
     if (pilha==NULL){
         printf("Erro ao alocar mem�ria para a pilha\n");
-        return;  // Termina o programa se a aloca��o falhar
+        return;  // Termina o programa se a alocacao falhar
     }
     pilha->topoA=-1;
     pilha->topoB=-1;
+    
+    //para efeito de prática estou definindo todos os valors do vetor como 0 para não ter lixo de memória (não fará diferença no resultado final)
     for(int i=0;i<TAMANHO;i++){
         pilha->valores[i]=0;
     }
@@ -21,6 +23,7 @@ Pilha* criarPilha(){
 
 Pilha* pushA(Pilha* pilha,int valor){
 
+    //verificando se quando formos dar um novo push, mudando portanto o topo da pilha, se o novo topo da pilha A (topoA+1) será igual ao topo da pilha B, se forem iguais, o vetor está completamente cheio
     if(pilha->topoA+1==pilha->topoB){
         printf("Todas as posicoes do vetor estao ocupadas!");
         return;
@@ -33,10 +36,13 @@ Pilha* pushA(Pilha* pilha,int valor){
 
 Pilha* pushB(Pilha* pilha,int valor){
 
+    //verificando se o novo topo da pilha B ( caso o push for ocorrer ) estará ocupado, isto é, o topo da pilha A será igual ao topo da pilha B
     if(pilha->topoA==pilha->topoB-1){
         printf("Todas as posicoes do vetor estao ocupadas!");
         return;
     }
+
+    //a pilha B está vazia
     if(pilha->topoB==-1){
         pilha->topoB=TAMANHO;
     }
@@ -48,7 +54,7 @@ Pilha* pushB(Pilha* pilha,int valor){
 }
 
 Pilha* popA(Pilha* pilha){
-    //pop retorna o valor para o usu�rio, ent�o vamos simplesmente alterar o valor do topo ap�s printar o valor para o usu�rio
+    //pop retorna o valor para o usuario, entao vamos simplesmente alterar o valor do topo apos printar o valor para o usuario
     if(pilha->topoA==-1){
         printf("\nNao existem mais valores na pilha A!");
         return;
@@ -75,7 +81,7 @@ Pilha* popB(Pilha* pilha){
 }
 
 Pilha* clearA(Pilha* pilha){
-    //vamos chamar a fun��o pop dentro de um la�o de repeti��o
+    //vamos chamar a funcao pop dentro de um laco de repeticao
     do{
         popA(pilha);
     }while(pilha->topoA>=0);
@@ -84,7 +90,7 @@ Pilha* clearA(Pilha* pilha){
 }
 
 Pilha* clearB(Pilha* pilha){
-    //vamos chamar a fun��o pop dentro de um la�o de repeti��o
+    //vamos chamar a funcao pop dentro de um laco de repeticao
     while(pilha->topoB<TAMANHO){
         popB(pilha);
     }
@@ -94,6 +100,7 @@ Pilha* clearB(Pilha* pilha){
 
 void imprimirA(Pilha* pilha){
 
+    //laco de repeticao para printar os valores da pilha A
     printf("[|");
     for(int i=pilha->topoA;i>=0;i--){
         printf("%d|",pilha->valores[i]);
@@ -104,6 +111,7 @@ void imprimirA(Pilha* pilha){
 }
 void imprimirB(Pilha* pilha){
 
+    //laco de repeticao para printar os valores da pilha B
     printf("[|");
     for(int i=pilha->topoB;i<TAMANHO;i++){
         printf("%d|",pilha->valores[i]);
