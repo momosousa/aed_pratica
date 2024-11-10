@@ -6,10 +6,10 @@
 // Função para criar um novo nó
 Node *criarNode(int linha, int coluna, int valor) {
   Node *novoNode = (Node *)malloc(sizeof(Node));
-  if (novoNode == NULL) {
-    printf("Erro ao alocar memoria!\n");
-    exit(1);
-  }
+  // if (novoNode == NULL) {
+  //   printf("Erro: Alocação de memória!\n");
+  //   exit(1);
+  // }
   novoNode->valor = valor;
   novoNode->linha = linha;
   novoNode->coluna = coluna;
@@ -21,10 +21,10 @@ Node *criarNode(int linha, int coluna, int valor) {
 // Função para criar a matriz esparsa
 MatrizEsparsa *criarMatriz(int numLinhas, int numColunas) {
   MatrizEsparsa *matriz = (MatrizEsparsa *)malloc(sizeof(MatrizEsparsa));
-  if (matriz == NULL) {
-    printf("Erro ao alocar memoria!\n");
-    exit(1);
-  }
+  // if (matriz == NULL) {
+  //   printf("Erro: Alocação de memória!\n");
+  //   exit(1);
+  // }
   matriz->numLinhas = numLinhas;
   matriz->numColunas = numColunas;
   matriz->linhas = (Node **)malloc(sizeof(Node *) * numLinhas);
@@ -203,7 +203,7 @@ MatrizEsparsa *somar(MatrizEsparsa *matriz1, MatrizEsparsa *matriz2) {
   MatrizEsparsa *resultado =
       criarMatriz(matriz1->numLinhas, matriz1->numColunas);
 
-  // Percorre as linhas das duas matrizes
+  // Passa por todas as linhas das duas matrizes
   for (int i = 0; i < matriz1->numLinhas; i++) {
     Node *n1 = matriz1->linhas[i]; // Lista da linha i de matriz1
     Node *n2 = matriz2->linhas[i]; // Lista da linha i de matriz2
@@ -213,7 +213,7 @@ MatrizEsparsa *somar(MatrizEsparsa *matriz1, MatrizEsparsa *matriz2) {
       if (n1 != NULL && (n2 == NULL || n1->coluna < n2->coluna)) {
         // Se só existir o elemento de matriz1 (ou se for da coluna menor)
         inserir(resultado, i, n1->coluna,
-                n1->valor); // Insere na matriz resultado
+                n1->valor); // Insere na matriz de resultado
         n1 = n1->proximo;   // Avança para o próximo elemento em matriz1
       } else if (n2 != NULL && (n1 == NULL || n2->coluna < n1->coluna)) {
         // Se só existir o elemento de matriz2 (ou se for da coluna menor)
@@ -230,5 +230,5 @@ MatrizEsparsa *somar(MatrizEsparsa *matriz1, MatrizEsparsa *matriz2) {
     }
   }
 
-  return resultado; // Retorna a matriz resultado da soma
+  return resultado;
 }
