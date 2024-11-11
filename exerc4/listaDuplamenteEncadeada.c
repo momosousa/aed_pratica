@@ -7,7 +7,7 @@
 Node *criarNode(int data) {
   Node *novoNode = (Node *)malloc(sizeof(Node));
   if (novoNode == NULL) {
-    printf("Erro ao alocar memoria!\n");
+    printf("Erro: Alocação de memória!\n");
     exit(1);
   }
   novoNode->data = data;
@@ -20,7 +20,7 @@ Node *criarNode(int data) {
 Lista *criarLista() {
   Lista *lista = (Lista *)malloc(sizeof(Lista));
   if (lista == NULL) {
-    printf("Erro ao alocar memoria!\n");
+    printf("Erro: Alocação de memória!\n");
     exit(1);
   }
   lista->head = NULL;
@@ -101,7 +101,7 @@ void insert(Lista *lista, int data, int position) {
   }
 }
 
-// Função para remover um elemento da lista
+// Função para remover o head da lista
 void removeHead(Lista *lista) {
 
   if (isEmpty(lista)) {
@@ -124,6 +124,7 @@ void removeHead(Lista *lista) {
   free(nodeRemover);
 }
 
+// Função para remover o tail da lista
 void removeTail(Lista *lista) {
 
   if (isEmpty(lista)) {
