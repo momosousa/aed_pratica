@@ -60,9 +60,6 @@ int main() {
   printf("\nEsparsidade da Matriz 1: %.2f\n", calculaEsparsidade(matriz1));
   printf("\nEsparsidade da Matriz 2: %.2f\n", calculaEsparsidade(matriz2));
   
-  // liberarMatriz(matriz1);
-  // liberarMatriz(matriz2);
-  
 
   return 0;
 }
