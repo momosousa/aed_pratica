@@ -10,18 +10,12 @@ int main() {
 
   // Inserindo valores na matriz1
   printf("Inserindo valores na Matriz 1:\n");
-  printf("inserir(matriz1, 0, 0, 5)\n");
-  printf("inserir(matriz1, 1, 2, 8)\n");
-  printf("inserir(matriz1, 2, 1, 3)\n");
   inserir(matriz1, 0, 0, 5);
   inserir(matriz1, 1, 2, 8);
   inserir(matriz1, 2, 1, 3);
 
   // Inserindo valores na matriz2
   printf("\nInserindo valores na Matriz 2:\n");
-  printf("inserir(matriz2, 0, 1, 4)\n");
-  printf("inserir(matriz2, 1, 0, 7)\n");
-  printf("inserir(matriz2, 2, 2, 9)\n");
   inserir(matriz2, 0, 1, 4);
   inserir(matriz2, 1, 0, 7);
   inserir(matriz2, 2, 2, 9);
