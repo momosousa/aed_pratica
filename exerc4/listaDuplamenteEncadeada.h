@@ -37,13 +37,13 @@ int busca(Lista *lista, int data);
 // Função para inserir um elemento em uma posição específica da lista
 void insert(Lista *lista, int data, int position);
 
-// Função para remover um elemento da lista
+// Função para remover o elemento head da lista
 void removeHead(Lista *lista);
 
-// Função para remover um elemento da lista
+// Função para remover o elemento tail da lista
 void removeTail(Lista *lista);
 
-// Função para remover um elemento da lista
+// Função para remover um elemento qualquer da lista
 void removeNode(Lista *lista, int position);
 
 // Função para limpar a lista
@@ -63,7 +63,5 @@ void ordenar(Lista *lista);
 
 // Função para realizar busca binária na lista
 int buscaBinaria(Lista *lista, int data, int i, int j);
-
-// Função para retornar o ponteiro do elemento central
 
 #endif // LISTADUPLAMENTEENCADEADA_H_INCLUDED
